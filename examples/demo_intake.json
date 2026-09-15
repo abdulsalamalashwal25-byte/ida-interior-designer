@@ -1,0 +1,13 @@
+{
+  "_guide": "DEMO answers — synthetic TEST data only, not a real client project. Units: mm.",
+  "meta.project_id": "PRJ-90",
+  "meta.project_name": "Demo Studio — TEST PROJECT",
+  "meta.track": "FULL",
+  "meta.is_test_project": true,
+  "space.outline": [[0, 0], [6000, 0], [6000, 4000], [0, 4000]],
+  "space.ceiling_height": 2800,
+  "space.orientation_north": 0,
+  "space.floor_level": 0,
+  "openings.presence": "NOT_PRESENT",
+  "openings": []
+}

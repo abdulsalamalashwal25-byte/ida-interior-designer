@@ -1,0 +1,11 @@
+[
+  {"field": "meta.project_id", "classification": "BLOCKING"},
+  {"field": "meta.project_name", "classification": "NON_BLOCKING"},
+  {"field": "meta.track", "classification": "NON_BLOCKING"},
+  {"field": "meta.is_test_project", "classification": "NON_BLOCKING"},
+  {"field": "space.outline", "classification": "BLOCKING"},
+  {"field": "space.ceiling_height", "classification": "BLOCKING"},
+  {"field": "openings.presence", "classification": "BLOCKING"},
+  {"field": "space.orientation_north", "classification": "NON_BLOCKING"},
+  {"field": "space.floor_level", "classification": "NON_BLOCKING"}
+]

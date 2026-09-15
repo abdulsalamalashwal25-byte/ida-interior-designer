@@ -36,6 +36,7 @@ TESTS = [
     ("00.5-F  Reference / Standards", "test_00_5_F.py"),
     ("01      Intake -> Validated Master", "test_01_phase01.py"),
     ("01-SA   Space Analysis · Unit 1", "test_01_space_analysis.py"),
+    ("IF      Agent Interfaces (API/CLI)", "test_interfaces.py"),
 ]
 
 HERE = Path(__file__).resolve().parent

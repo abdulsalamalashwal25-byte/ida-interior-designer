@@ -1,0 +1,421 @@
+{
+  "meta": {
+    "project_id": "PRJ-90",
+    "project_name": "Demo Studio — TEST PROJECT",
+    "revision": "R00",
+    "geometry_version": "G-000",
+    "status": "DRAFT",
+    "track": "FULL",
+    "units": "mm",
+    "created_on": "2026-09-11",
+    "is_test_project": true,
+    "not_for_construction": "DESIGN INTENT — NOT FOR CONSTRUCTION",
+    "test_banner": "TEST PROJECT — NOT A REAL CLIENT PROJECT"
+  },
+  "space": {
+    "outline": {
+      "value": [
+        [
+          0,
+          0
+        ],
+        [
+          6000,
+          0
+        ],
+        [
+          6000,
+          4000
+        ],
+        [
+          0,
+          4000
+        ]
+      ],
+      "status": "C",
+      "source_type": "CLIENT_INPUT",
+      "source_ref": "intake/2.2",
+      "recorded_on": "2026-09-15",
+      "unit": "mm"
+    },
+    "ceiling_height": {
+      "value": 2800,
+      "status": "C",
+      "source_type": "CLIENT_INPUT",
+      "source_ref": "intake/2.4",
+      "recorded_on": "2026-09-15",
+      "unit": "mm"
+    },
+    "orientation_north": {
+      "value": null,
+      "unit": "deg",
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not supplied",
+      "recorded_on": "2026-09-11",
+      "blocking": false,
+      "unknown_id": "U-003",
+      "note": "NON-BLOCKING. Never assume sun path or qibla direction."
+    },
+    "floor_level": {
+      "value": null,
+      "unit": "mm",
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not supplied",
+      "recorded_on": "2026-09-11",
+      "blocking": false,
+      "unknown_id": "U-004"
+    }
+  },
+  "presence_register": {
+    "columns": {
+      "value": null,
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not asked yet",
+      "recorded_on": "2026-09-11",
+      "blocking": true,
+      "unknown_id": "U-005",
+      "presence": "UNKNOWN",
+      "note": "Do NOT assume there are no columns. Unasked is not absent."
+    },
+    "beams": {
+      "value": null,
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not asked yet",
+      "recorded_on": "2026-09-11",
+      "blocking": true,
+      "unknown_id": "U-006",
+      "presence": "UNKNOWN"
+    },
+    "protrusions": {
+      "value": null,
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not asked yet",
+      "recorded_on": "2026-09-11",
+      "blocking": true,
+      "unknown_id": "U-007",
+      "presence": "UNKNOWN"
+    },
+    "level_changes": {
+      "value": null,
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not asked yet",
+      "recorded_on": "2026-09-11",
+      "blocking": false,
+      "unknown_id": "U-008",
+      "presence": "UNKNOWN"
+    },
+    "services": {
+      "value": null,
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not asked yet",
+      "recorded_on": "2026-09-11",
+      "blocking": false,
+      "unknown_id": "U-009",
+      "presence": "UNKNOWN"
+    },
+    "existing_furniture": {
+      "value": null,
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not asked yet",
+      "recorded_on": "2026-09-11",
+      "blocking": false,
+      "unknown_id": "U-010",
+      "presence": "UNKNOWN"
+    },
+    "openings": {
+      "value": null,
+      "status": "C",
+      "source_type": "CLIENT_INPUT",
+      "source_ref": "intake/3",
+      "recorded_on": "2026-09-15",
+      "note": "client positively confirmed there are no openings; this is not an unknown",
+      "presence": "NOT_PRESENT"
+    },
+    "circulation": {
+      "value": null,
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not asked yet",
+      "recorded_on": "2026-09-11",
+      "blocking": true,
+      "unknown_id": "U-012",
+      "presence": "UNKNOWN",
+      "note": "Do NOT assume the space has no defined circulation. Nobody has been asked."
+    }
+  },
+  "walls": [
+    {
+      "id": "W-01",
+      "start": {
+        "value": [
+          0,
+          0
+        ],
+        "status": "C",
+        "source_type": "CLIENT_INPUT",
+        "source_ref": "demo fixture (TEST — not a real survey)",
+        "recorded_on": "2026-09-15",
+        "unit": "mm"
+      },
+      "end": {
+        "value": [
+          6000,
+          0
+        ],
+        "status": "C",
+        "source_type": "CLIENT_INPUT",
+        "source_ref": "demo fixture (TEST — not a real survey)",
+        "recorded_on": "2026-09-15",
+        "unit": "mm"
+      },
+      "thickness": {
+        "value": 200,
+        "status": "C",
+        "source_type": "CLIENT_INPUT",
+        "source_ref": "demo fixture (TEST — not a real survey)",
+        "recorded_on": "2026-09-15",
+        "unit": "mm"
+      },
+      "structural": {
+        "value": false,
+        "status": "C",
+        "source_type": "CLIENT_INPUT",
+        "source_ref": "demo fixture (TEST — not a real survey)",
+        "recorded_on": "2026-09-15",
+        "unit": "none",
+        "note": "demo fixture: non-structural"
+      }
+    },
+    {
+      "id": "W-02",
+      "start": {
+        "value": [
+          6000,
+          0
+        ],
+        "status": "C",
+        "source_type": "CLIENT_INPUT",
+        "source_ref": "demo fixture (TEST — not a real survey)",
+        "recorded_on": "2026-09-15",
+        "unit": "mm"
+      },
+      "end": {
+        "value": [
+          6000,
+          4000
+        ],
+        "status": "C",
+        "source_type": "CLIENT_INPUT",
+        "source_ref": "demo fixture (TEST — not a real survey)",
+        "recorded_on": "2026-09-15",
+        "unit": "mm"
+      },
+      "thickness": {
+        "value": 200,
+        "status": "C",
+        "source_type": "CLIENT_INPUT",
+        "source_ref": "demo fixture (TEST — not a real survey)",
+        "recorded_on": "2026-09-15",
+        "unit": "mm"
+      },
+      "structural": {
+        "value": false,
+        "status": "C",
+        "source_type": "CLIENT_INPUT",
+        "source_ref": "demo fixture (TEST — not a real survey)",
+        "recorded_on": "2026-09-15",
+        "unit": "none",
+        "note": "demo fixture: non-structural"
+      }
+    },
+    {
+      "id": "W-03",
+      "start": {
+        "value": [
+          6000,
+          4000
+        ],
+        "status": "C",
+        "source_type": "CLIENT_INPUT",
+        "source_ref": "demo fixture (TEST — not a real survey)",
+        "recorded_on": "2026-09-15",
+        "unit": "mm"
+      },
+      "end": {
+        "value": [
+          0,
+          4000
+        ],
+        "status": "C",
+        "source_type": "CLIENT_INPUT",
+        "source_ref": "demo fixture (TEST — not a real survey)",
+        "recorded_on": "2026-09-15",
+        "unit": "mm"
+      },
+      "thickness": {
+        "value": 200,
+        "status": "C",
+        "source_type": "CLIENT_INPUT",
+        "source_ref": "demo fixture (TEST — not a real survey)",
+        "recorded_on": "2026-09-15",
+        "unit": "mm"
+      },
+      "structural": {
+        "value": false,
+        "status": "C",
+        "source_type": "CLIENT_INPUT",
+        "source_ref": "demo fixture (TEST — not a real survey)",
+        "recorded_on": "2026-09-15",
+        "unit": "none",
+        "note": "demo fixture: non-structural"
+      }
+    },
+    {
+      "id": "W-04",
+      "start": {
+        "value": [
+          0,
+          4000
+        ],
+        "status": "C",
+        "source_type": "CLIENT_INPUT",
+        "source_ref": "demo fixture (TEST — not a real survey)",
+        "recorded_on": "2026-09-15",
+        "unit": "mm"
+      },
+      "end": {
+        "value": [
+          0,
+          0
+        ],
+        "status": "C",
+        "source_type": "CLIENT_INPUT",
+        "source_ref": "demo fixture (TEST — not a real survey)",
+        "recorded_on": "2026-09-15",
+        "unit": "mm"
+      },
+      "thickness": {
+        "value": 200,
+        "status": "C",
+        "source_type": "CLIENT_INPUT",
+        "source_ref": "demo fixture (TEST — not a real survey)",
+        "recorded_on": "2026-09-15",
+        "unit": "mm"
+      },
+      "structural": {
+        "value": false,
+        "status": "C",
+        "source_type": "CLIENT_INPUT",
+        "source_ref": "demo fixture (TEST — not a real survey)",
+        "recorded_on": "2026-09-15",
+        "unit": "none",
+        "note": "demo fixture: non-structural"
+      }
+    }
+  ],
+  "openings": [],
+  "columns": [],
+  "zones": [],
+  "furniture": [],
+  "materials": [],
+  "lighting": [],
+  "cameras": [],
+  "registers": {
+    "unknowns": [
+      {
+        "id": "U-001",
+        "question": "Room outline with dimensions in mm?",
+        "blocking": true,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-002",
+        "question": "Clear ceiling height in mm?",
+        "blocking": true,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-003",
+        "question": "North orientation?",
+        "blocking": false,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-004",
+        "question": "Finished floor level / level changes?",
+        "blocking": false,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-005",
+        "question": "Are there columns? If none, state NONE explicitly.",
+        "blocking": true,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-006",
+        "question": "Are there ceiling beams? If none, state NONE explicitly.",
+        "blocking": true,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-007",
+        "question": "Are there protrusions/recesses? If none, state NONE explicitly.",
+        "blocking": true,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-008",
+        "question": "Any floor level changes? If none, state NONE explicitly.",
+        "blocking": false,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-009",
+        "question": "Existing services (electrical/plumbing/HVAC)? If none, state NONE.",
+        "blocking": false,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-010",
+        "question": "Existing furniture to keep? If none, state NONE explicitly.",
+        "blocking": false,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-011",
+        "question": "Door/window positions, widths, heights, swing?",
+        "blocking": true,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-012",
+        "question": "Are there defined circulation routes in this space, and what are they?",
+        "blocking": true,
+        "raised_on": "2026-09-11"
+      }
+    ],
+    "assumptions": [],
+    "proposals": [],
+    "decisions": [],
+    "change_requests": [],
+    "objections": [],
+    "changelog": [
+      {
+        "revision": "R00",
+        "date": "2026-09-11",
+        "type": "INITIAL",
+        "summary": "Master created from template. No confirmed data yet."
+      }
+    ]
+  },
+  "outputs": []
+}

@@ -1,0 +1,5 @@
+# Interior Designer Agent — runtime dependencies.
+# Everything except the schema layer (00.5-A) is stdlib-only.
+# The schema gate validates project_master.json against
+# project_master.schema.json (Draft 2020-12).
+jsonschema>=4.0

@@ -422,7 +422,11 @@ def emit_class_b(ga_artifact, parameters=None, identity=None,
     pts = " ".join(f"{_num(x)},{_num(y)}" for x, y in
                    ((p[0], p[1]) for p in outline))
     L.append('  <g id="space-outline">')
-    L.append(f'    <polygon points="{pts}" fill="none"{stroke or " stroke=\"\""}'
+    # COMPAT-3.11 (interfaces): the empty-stroke literal is hoisted out of
+    # the f-string expression. Python 3.11 forbids a backslash inside an
+    # f-string expression; 3.12+ allows it. The emitted text is identical.
+    _empty_stroke = ' stroke=""'
+    L.append(f'    <polygon points="{pts}" fill="none"{stroke or _empty_stroke}'
              f' data-provenance="{_esc(ga["outline"].get("provenance", ""))}"/>')
     L.append("  </g>")
 

@@ -1,0 +1,9 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Generated project workspaces (built by `ida init` / `ida build`)
+projects/
+
+# Local scratch
+*.bak
