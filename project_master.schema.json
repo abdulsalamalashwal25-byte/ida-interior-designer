@@ -1,0 +1,2200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ida.local/schemas/project_master.schema.json",
+  "title": "Interior Designer Agent — Project Master (Single Source of Truth)",
+  "description": "Schema R01-A. Every information-bearing value MUST be a provenance-wrapped fact. Bare scalars are rejected by design.",
+  "type": "object",
+  "required": [
+    "meta",
+    "space",
+    "presence_register",
+    "walls",
+    "openings",
+    "columns",
+    "zones",
+    "furniture",
+    "materials",
+    "cameras",
+    "registers",
+    "outputs"
+  ],
+  "properties": {
+    "meta": {
+      "$ref": "#/$defs/meta"
+    },
+    "space": {
+      "$ref": "#/$defs/space"
+    },
+    "presence_register": {
+      "$ref": "#/$defs/presence_register"
+    },
+    "walls": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/wall"
+      }
+    },
+    "openings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/opening"
+      }
+    },
+    "columns": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/column"
+      }
+    },
+    "zones": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/zone"
+      }
+    },
+    "circulation": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/circulation_path"
+      }
+    },
+    "furniture": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/furniture"
+      }
+    },
+    "materials": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/material"
+      }
+    },
+    "lighting": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/lightfixture"
+      }
+    },
+    "cameras": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/camera"
+      }
+    },
+    "registers": {
+      "$ref": "#/$defs/registers"
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/output"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "revision": {
+      "type": "string",
+      "pattern": "^R[0-9]{2}$"
+    },
+    "geometry_version": {
+      "type": "string",
+      "pattern": "^G-[0-9]{3}$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{6,64}$"
+    },
+    "external_ref": {
+      "type": "object",
+      "description": "Mandatory citation block for anything coming from outside the project.",
+      "required": [
+        "ref",
+        "retrieved_on"
+      ],
+      "properties": {
+        "ref": {
+          "type": "string",
+          "minLength": 5
+        },
+        "url": {
+          "type": "string"
+        },
+        "retrieved_on": {
+          "$ref": "#/$defs/date"
+        },
+        "applicability_note": {
+          "type": "string",
+          "description": "Why this external figure may or may not apply to THIS project. Never assume it does."
+        }
+      },
+      "additionalProperties": false
+    },
+    "fact": {
+      "type": "object",
+      "description": "Provenance-wrapped value. RULE: no value may exist in the master without status + source.",
+      "required": [
+        "value",
+        "status",
+        "source_type",
+        "source_ref",
+        "recorded_on"
+      ],
+      "properties": {
+        "value": {
+          "description": "any type, or null when status = U"
+        },
+        "unit": {
+          "enum": [
+            "mm",
+            "mm2",
+            "deg",
+            "count",
+            "kelvin",
+            "lux",
+            "watt",
+            "currency",
+            "none"
+          ]
+        },
+        "status": {
+          "enum": [
+            "C",
+            "D",
+            "A",
+            "U",
+            "P"
+          ]
+        },
+        "source_type": {
+          "enum": [
+            "CLIENT_INPUT",
+            "USER_APPROVAL",
+            "DERIVED_CALC",
+            "AGENT_PROPOSAL",
+            "AGENT_ASSUMPTION",
+            "EXTERNAL_STANDARD",
+            "EXTERNAL_LIBRARY",
+            "NOT_PROVIDED",
+            "AI_IMAGE"
+          ]
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 3
+        },
+        "recorded_on": {
+          "$ref": "#/$defs/date"
+        },
+        "note": {
+          "type": "string"
+        },
+        "presence": {
+          "enum": [
+            "PRESENT",
+            "NOT_PRESENT",
+            "UNKNOWN"
+          ],
+          "description": "TRI-STATE (Gate 00.5-A R02 §3). PRESENT = element exists and has data. NOT_PRESENT = client CONFIRMED it does not exist. UNKNOWN = nobody knows. An empty field is NEVER evidence of absence."
+        },
+        "derived_from": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "formula": {
+          "type": "string",
+          "minLength": 3
+        },
+        "derivation_type": {
+          "enum": [
+            "ARITHMETIC",
+            "GEOMETRIC",
+            "LOGICAL_DEDUCTION"
+          ],
+          "description": "A [D] may ONLY be a deterministic computation. Any preference, selection or design judgement is a [P], never a [D]."
+        },
+        "assumption_id": {
+          "type": "string",
+          "pattern": "^A-[0-9]{2,3}$"
+        },
+        "impact": {
+          "type": "string",
+          "minLength": 5
+        },
+        "approval_state": {
+          "enum": [
+            "PENDING_APPROVAL",
+            "APPROVED",
+            "REJECTED"
+          ]
+        },
+        "proposal_id": {
+          "type": "string",
+          "pattern": "^P-[0-9]{3}$"
+        },
+        "blocking": {
+          "type": "boolean"
+        },
+        "unknown_id": {
+          "type": "string",
+          "pattern": "^U-[0-9]{3}$"
+        },
+        "external": {
+          "$ref": "#/$defs/external_ref"
+        },
+        "decision_id": {
+          "type": "string",
+          "pattern": "^DEC-[0-9]{3}$"
+        },
+        "approved_by": {
+          "const": "USER"
+        },
+        "approved_on": {
+          "$ref": "#/$defs/date"
+        },
+        "approved_in_revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "locked": {
+          "type": "boolean"
+        },
+        "conflict": {
+          "type": "object",
+          "description": "KNOWN CONFLICT flag (Spec R01 §7.4). Surfaces on every generated output until resolved.",
+          "required": [
+            "cr_id",
+            "description"
+          ],
+          "properties": {
+            "cr_id": {
+              "type": "string",
+              "pattern": "^CR-[0-9]{3}$"
+            },
+            "description": {
+              "type": "string",
+              "minLength": 5
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "allOf": [
+        {
+          "$comment": "RULE F1 — AI is never a source of truth (Spec R01 §8). Hard rejection.",
+          "if": {
+            "properties": {
+              "source_type": {
+                "const": "AI_IMAGE"
+              }
+            },
+            "required": [
+              "source_type"
+            ]
+          },
+          "then": {
+            "const": "__AI_IMAGE_IS_NEVER_A_VALID_SOURCE__"
+          }
+        },
+        {
+          "$comment": "RULE F2 — [C] only from client input or explicit user approval (Spec R01 §6.2). A CONFIRMED value may not be null, EXCEPT for a confirmed absence (presence=NOT_PRESENT), where null is the correct representation of 'this element does not exist'.",
+          "if": {
+            "properties": {
+              "status": {
+                "const": "C"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "allOf": [
+              {
+                "properties": {
+                  "source_type": {
+                    "enum": [
+                      "CLIENT_INPUT",
+                      "USER_APPROVAL"
+                    ]
+                  }
+                }
+              },
+              {
+                "if": {
+                  "not": {
+                    "properties": {
+                      "presence": {
+                        "const": "NOT_PRESENT"
+                      }
+                    },
+                    "required": [
+                      "presence"
+                    ]
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "value": {
+                      "not": {
+                        "type": "null"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "$comment": "RULE F3 — a [C] created by approval must carry a full Decision Record (Spec R01 §9).",
+          "if": {
+            "properties": {
+              "status": {
+                "const": "C"
+              },
+              "source_type": {
+                "const": "USER_APPROVAL"
+              }
+            },
+            "required": [
+              "status",
+              "source_type"
+            ]
+          },
+          "then": {
+            "required": [
+              "decision_id",
+              "approved_by",
+              "approved_on",
+              "approved_in_revision"
+            ]
+          }
+        },
+        {
+          "$comment": "RULE F4 — [D] must show its inputs, its formula, and declare a deterministic derivation type (Gate 00.5-A R02 §2).",
+          "if": {
+            "properties": {
+              "status": {
+                "const": "D"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "derived_from",
+              "formula",
+              "derivation_type"
+            ],
+            "properties": {
+              "source_type": {
+                "const": "DERIVED_CALC"
+              }
+            }
+          }
+        },
+        {
+          "$comment": "RULE F10 — a [D] can never be locked directly and can never carry a decision_id: a derived value is a consequence, not a decision. Design choices must be [P] -> approval -> [C].",
+          "if": {
+            "properties": {
+              "status": {
+                "const": "D"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "locked": {
+                "const": false
+              }
+            },
+            "not": {
+              "required": [
+                "decision_id"
+              ]
+            }
+          }
+        },
+        {
+          "$comment": "RULE T1 — TRI-STATE: confirmed absence. NOT_PRESENT is a positive claim and must be CONFIRMED by the client, with a null value.",
+          "if": {
+            "properties": {
+              "presence": {
+                "const": "NOT_PRESENT"
+              }
+            },
+            "required": [
+              "presence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "status": {
+                "const": "C"
+              },
+              "value": {
+                "type": "null"
+              },
+              "source_type": {
+                "enum": [
+                  "CLIENT_INPUT",
+                  "USER_APPROVAL"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "$comment": "RULE T2 — TRI-STATE: an UNKNOWN presence must carry status U. Absence of information is never absence of the element.",
+          "if": {
+            "properties": {
+              "presence": {
+                "const": "UNKNOWN"
+              }
+            },
+            "required": [
+              "presence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "status": {
+                "const": "U"
+              }
+            }
+          }
+        },
+        {
+          "$comment": "RULE T3 — TRI-STATE: PRESENT means there is real data; the value may not be null.",
+          "if": {
+            "properties": {
+              "presence": {
+                "const": "PRESENT"
+              }
+            },
+            "required": [
+              "presence"
+            ]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "not": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "RULE T4 — a [U] fact may never claim the element is absent.",
+          "if": {
+            "properties": {
+              "status": {
+                "const": "U"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "presence": {
+                "not": {
+                  "const": "NOT_PRESENT"
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "RULE F5 — [A] must be declared, impact-stated, and never silently locked.",
+          "if": {
+            "properties": {
+              "status": {
+                "const": "A"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "assumption_id",
+              "impact",
+              "approval_state"
+            ],
+            "properties": {
+              "source_type": {
+                "const": "AGENT_ASSUMPTION"
+              },
+              "locked": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "$comment": "RULE F6 — [U] carries no value and must declare blocking status.",
+          "if": {
+            "properties": {
+              "status": {
+                "const": "U"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "blocking",
+              "unknown_id"
+            ],
+            "properties": {
+              "value": {
+                "type": "null"
+              },
+              "source_type": {
+                "const": "NOT_PROVIDED"
+              }
+            }
+          }
+        },
+        {
+          "$comment": "RULE F7 — [P] is an agent/external suggestion and can never be locked.",
+          "if": {
+            "properties": {
+              "status": {
+                "const": "P"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "proposal_id"
+            ],
+            "properties": {
+              "source_type": {
+                "enum": [
+                  "AGENT_PROPOSAL",
+                  "EXTERNAL_STANDARD",
+                  "EXTERNAL_LIBRARY"
+                ]
+              },
+              "locked": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "$comment": "RULE F8 — external standards/libraries can never be [C] directly; they enter as [P] or [D] and require a citation (Gate 00 change #4).",
+          "if": {
+            "properties": {
+              "source_type": {
+                "enum": [
+                  "EXTERNAL_STANDARD",
+                  "EXTERNAL_LIBRARY"
+                ]
+              }
+            },
+            "required": [
+              "source_type"
+            ]
+          },
+          "then": {
+            "required": [
+              "external"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "P",
+                  "D"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "$comment": "RULE F9 — only a CONFIRMED fact may be locked into the frozen master.",
+          "if": {
+            "properties": {
+              "locked": {
+                "const": true
+              }
+            },
+            "required": [
+              "locked"
+            ]
+          },
+          "then": {
+            "properties": {
+              "status": {
+                "const": "C"
+              }
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "presence_register": {
+      "type": "object",
+      "description": "TRI-STATE guard for whole collections (Gate 00.5-A R02 §5). An empty array is ambiguous: it may mean 'confirmed none' or 'never asked'. This register forces the distinction. Every collection that can legitimately be empty MUST declare its presence here.",
+      "required": [
+        "columns",
+        "beams",
+        "protrusions",
+        "level_changes",
+        "services",
+        "existing_furniture"
+      ],
+      "properties": {
+        "columns": {
+          "$ref": "#/$defs/fact"
+        },
+        "beams": {
+          "$ref": "#/$defs/fact"
+        },
+        "protrusions": {
+          "$ref": "#/$defs/fact"
+        },
+        "level_changes": {
+          "$ref": "#/$defs/fact"
+        },
+        "services": {
+          "$ref": "#/$defs/fact"
+        },
+        "existing_furniture": {
+          "$ref": "#/$defs/fact"
+        },
+        "openings": {
+          "$ref": "#/$defs/fact"
+        },
+        "circulation": {
+          "$ref": "#/$defs/fact"
+        }
+      },
+      "additionalProperties": false
+    },
+    "meta": {
+      "type": "object",
+      "required": [
+        "project_id",
+        "revision",
+        "geometry_version",
+        "status",
+        "units",
+        "created_on",
+        "is_test_project",
+        "not_for_construction"
+      ],
+      "properties": {
+        "project_id": {
+          "type": "string",
+          "pattern": "^PRJ-[0-9]{2,3}$"
+        },
+        "project_name": {
+          "type": "string"
+        },
+        "revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "geometry_version": {
+          "$ref": "#/$defs/geometry_version"
+        },
+        "status": {
+          "enum": [
+            "DRAFT",
+            "FROZEN"
+          ]
+        },
+        "track": {
+          "enum": [
+            "FULL",
+            "LITE"
+          ]
+        },
+        "units": {
+          "const": "mm"
+        },
+        "created_on": {
+          "$ref": "#/$defs/date"
+        },
+        "frozen_on": {
+          "$ref": "#/$defs/date"
+        },
+        "master_hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "is_test_project": {
+          "type": "boolean"
+        },
+        "test_banner": {
+          "const": "TEST PROJECT — NOT A REAL CLIENT PROJECT"
+        },
+        "not_for_construction": {
+          "const": "DESIGN INTENT — NOT FOR CONSTRUCTION"
+        },
+        "topology_policy": {
+          "type": "object",
+          "description": "Declared topology policy (Gate 00.5-B2 approval). OPTIONAL. Absence of require_closed_envelope means UNSPECIFIED — it does NOT mean false. The engine may never infer this policy from the model's own geometry.",
+          "properties": {
+            "require_closed_envelope": {
+              "type": "boolean",
+              "description": "true = closure is required, WT-003 applicable. false = closure explicitly not required. Absent = UNSPECIFIED."
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "allOf": [
+        {
+          "$comment": "RULE M1 — a test project must be labelled in the data itself (Gate 00 change #7).",
+          "if": {
+            "properties": {
+              "is_test_project": {
+                "const": true
+              }
+            },
+            "required": [
+              "is_test_project"
+            ]
+          },
+          "then": {
+            "required": [
+              "test_banner"
+            ]
+          }
+        },
+        {
+          "$comment": "RULE M2 — a frozen master must record when it was frozen and its hash.",
+          "if": {
+            "properties": {
+              "status": {
+                "const": "FROZEN"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "required": [
+              "frozen_on",
+              "master_hash"
+            ]
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "space": {
+      "type": "object",
+      "required": [
+        "outline",
+        "ceiling_height",
+        "orientation_north",
+        "floor_level"
+      ],
+      "properties": {
+        "outline": {
+          "$ref": "#/$defs/fact"
+        },
+        "ceiling_height": {
+          "$ref": "#/$defs/fact"
+        },
+        "structural_beams": {
+          "$ref": "#/$defs/fact"
+        },
+        "orientation_north": {
+          "$ref": "#/$defs/fact"
+        },
+        "floor_level": {
+          "$ref": "#/$defs/fact"
+        },
+        "services": {
+          "$ref": "#/$defs/fact"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$comment": "RULE SG1 (DEF-CROSS-01c) — a KNOWN ceiling height must be a positive number of millimetres. A negative or zero clear height is impossible by definition. NO standard is applied: 50mm passes this rule.",
+          "if": {
+            "properties": {
+              "ceiling_height": {
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "C",
+                      "D",
+                      "A",
+                      "P"
+                    ]
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            },
+            "required": [
+              "ceiling_height"
+            ]
+          },
+          "then": {
+            "properties": {
+              "ceiling_height": {
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "RULE SG2 (DEF-CROSS-01d) — a KNOWN space outline must carry at least three points. Two points describe a line, which cannot bound an area. This is a topological minimum, not a shape preference: no convexity, closure or size is implied.",
+          "if": {
+            "properties": {
+              "outline": {
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "C",
+                      "D",
+                      "A",
+                      "P"
+                    ]
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            },
+            "required": [
+              "outline"
+            ]
+          },
+          "then": {
+            "properties": {
+              "outline": {
+                "properties": {
+                  "value": {
+                    "type": "array",
+                    "minItems": 3
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "wall": {
+      "type": "object",
+      "required": [
+        "id",
+        "start",
+        "end",
+        "thickness",
+        "structural"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^W-[0-9]{2,3}$"
+        },
+        "start": {
+          "$ref": "#/$defs/fact"
+        },
+        "end": {
+          "$ref": "#/$defs/fact"
+        },
+        "thickness": {
+          "$ref": "#/$defs/fact"
+        },
+        "height": {
+          "$ref": "#/$defs/fact"
+        },
+        "structural": {
+          "$ref": "#/$defs/fact"
+        },
+        "finish_ref": {
+          "type": "string",
+          "pattern": "^M-[0-9]{2,3}$"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$comment": "RULE WG1 (DEF-CROSS-01a) — a KNOWN wall thickness must be a positive number of millimetres. Zero or negative is mathematically impossible, not a design opinion: B3/B4 consume thickness as th/2.0, so a negative value silently SHRINKS the wall body and turns a real overlap into a false PASS. No minimum thickness is implied — 50mm is accepted.",
+          "if": {
+            "properties": {
+              "thickness": {
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "C",
+                      "D",
+                      "A",
+                      "P"
+                    ]
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            },
+            "required": [
+              "thickness"
+            ]
+          },
+          "then": {
+            "properties": {
+              "thickness": {
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "RULE WG2 (DEF-CROSS-01b) — a KNOWN wall height must be a positive number of millimetres. A wall of negative extent cannot exist. No reasonable height is implied.",
+          "if": {
+            "properties": {
+              "height": {
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "C",
+                      "D",
+                      "A",
+                      "P"
+                    ]
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            },
+            "required": [
+              "height"
+            ]
+          },
+          "then": {
+            "properties": {
+              "height": {
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "exclusiveMinimum": 0
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "opening": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "host_wall",
+        "offset",
+        "width",
+        "height"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^(D|WN)-[0-9]{2,3}$"
+        },
+        "kind": {
+          "enum": [
+            "door",
+            "window",
+            "opening"
+          ]
+        },
+        "host_wall": {
+          "type": "string",
+          "pattern": "^W-[0-9]{2,3}$"
+        },
+        "offset": {
+          "$ref": "#/$defs/fact"
+        },
+        "width": {
+          "$ref": "#/$defs/fact"
+        },
+        "height": {
+          "$ref": "#/$defs/fact"
+        },
+        "sill": {
+          "$ref": "#/$defs/fact"
+        },
+        "swing": {
+          "$ref": "#/$defs/fact"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$comment": "RULE DG1 — a KNOWN swing must carry the full minimal geometry. A partial or malformed swing is rejected rather than completed by guesswork. An absent swing stays absent (GAP, not a default).",
+          "if": {
+            "required": [
+              "swing"
+            ],
+            "properties": {
+              "swing": {
+                "required": [
+                  "status"
+                ],
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "C",
+                      "D",
+                      "A",
+                      "P"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "swing": {
+                "properties": {
+                  "value": {
+                    "$ref": "#/$defs/swing_geometry"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "column": {
+      "type": "object",
+      "required": [
+        "id",
+        "position",
+        "dims"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^C-[0-9]{2,3}$"
+        },
+        "position": {
+          "$ref": "#/$defs/fact"
+        },
+        "dims": {
+          "$ref": "#/$defs/fact"
+        }
+      },
+      "additionalProperties": false
+    },
+    "zone": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "function",
+        "boundary"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^Z-[0-9]{2,3}$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 2
+        },
+        "function": {
+          "$ref": "#/$defs/fact"
+        },
+        "boundary": {
+          "$ref": "#/$defs/fact"
+        },
+        "occupancy": {
+          "$ref": "#/$defs/fact"
+        }
+      },
+      "additionalProperties": false
+    },
+    "furniture": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "position",
+        "dims",
+        "material_ref"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^F-[0-9]{2,3}$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 2
+        },
+        "zone_ref": {
+          "type": "string",
+          "pattern": "^Z-[0-9]{2,3}$"
+        },
+        "position": {
+          "$ref": "#/$defs/fact"
+        },
+        "position_reference": {
+          "$ref": "#/$defs/fact",
+          "description": "GAP-B3-01 fix. Declares WHAT the position coordinate refers to. OPTIONAL field, but its ABSENCE means UNKNOWN — it is never silently read as CENTER. Value must be one of the declared datums."
+        },
+        "rotation": {
+          "$ref": "#/$defs/fact",
+          "description": "GAP-B3-02 fix. Rotation in degrees, counter-clockwise, about the position point. OPTIONAL field, but its ABSENCE means UNKNOWN — it is never silently read as 0. An explicit 0 must be stated as a value."
+        },
+        "dims": {
+          "$ref": "#/$defs/fact"
+        },
+        "material_ref": {
+          "type": "string",
+          "pattern": "^M-[0-9]{2,3}$"
+        },
+        "clearance": {
+          "$ref": "#/$defs/fact"
+        },
+        "library_ref": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "$comment": "RULE FG1 — a KNOWN position_reference must name a declared datum. Invalid datums are rejected rather than guessed.",
+          "if": {
+            "properties": {
+              "position_reference": {
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "C",
+                      "D",
+                      "A",
+                      "P"
+                    ]
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            },
+            "required": [
+              "position_reference"
+            ]
+          },
+          "then": {
+            "properties": {
+              "position_reference": {
+                "properties": {
+                  "value": {
+                    "enum": [
+                      "CENTER",
+                      "CORNER_MIN",
+                      "CORNER_MAX"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "RULE FG2 — a KNOWN rotation must be a finite number of degrees. Explicit 0 is allowed; a missing field is UNKNOWN, not 0.",
+          "if": {
+            "properties": {
+              "rotation": {
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "C",
+                      "D",
+                      "A",
+                      "P"
+                    ]
+                  }
+                },
+                "required": [
+                  "status"
+                ]
+              }
+            },
+            "required": [
+              "rotation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "rotation": {
+                "properties": {
+                  "value": {
+                    "type": "number",
+                    "minimum": -360,
+                    "maximum": 360
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "material": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "color_hex",
+        "applied_to"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^M-[0-9]{2,3}$"
+        },
+        "name": {
+          "$ref": "#/$defs/fact"
+        },
+        "color_hex": {
+          "$ref": "#/$defs/fact"
+        },
+        "finish": {
+          "$ref": "#/$defs/fact"
+        },
+        "applied_to": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "lightfixture": {
+      "type": "object",
+      "required": [
+        "id",
+        "position",
+        "fixture_type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^L-[0-9]{2,3}$"
+        },
+        "position": {
+          "$ref": "#/$defs/fact"
+        },
+        "fixture_type": {
+          "$ref": "#/$defs/fact"
+        },
+        "lumens": {
+          "$ref": "#/$defs/fact"
+        },
+        "cct": {
+          "$ref": "#/$defs/fact"
+        }
+      },
+      "additionalProperties": false
+    },
+    "camera": {
+      "type": "object",
+      "description": "Frozen camera definition so any view can be reproduced identically (Spec R01 §13 check 10).",
+      "required": [
+        "id",
+        "pos",
+        "target",
+        "fov_deg",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^CAM-[0-9]{2}$"
+        },
+        "label": {
+          "type": "string"
+        },
+        "pos": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "target": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "fov_deg": {
+          "type": "number",
+          "minimum": 10,
+          "maximum": 120
+        },
+        "status": {
+          "enum": [
+            "C",
+            "P"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "registers": {
+      "type": "object",
+      "required": [
+        "unknowns",
+        "assumptions",
+        "proposals",
+        "decisions",
+        "change_requests",
+        "objections",
+        "changelog"
+      ],
+      "properties": {
+        "unknowns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/unknown_entry"
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assumption_entry"
+          }
+        },
+        "proposals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/proposal_entry"
+          }
+        },
+        "decisions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/decision_entry"
+          }
+        },
+        "change_requests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/cr_entry"
+          }
+        },
+        "objections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/objection_entry"
+          }
+        },
+        "changelog": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/changelog_entry"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "unknown_entry": {
+      "type": "object",
+      "required": [
+        "id",
+        "question",
+        "blocking",
+        "raised_on"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^U-[0-9]{3}$"
+        },
+        "question": {
+          "type": "string",
+          "minLength": 5
+        },
+        "blocking": {
+          "type": "boolean"
+        },
+        "affects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "raised_on": {
+          "$ref": "#/$defs/date"
+        },
+        "resolved_on": {
+          "$ref": "#/$defs/date"
+        }
+      },
+      "additionalProperties": false
+    },
+    "assumption_entry": {
+      "type": "object",
+      "required": [
+        "id",
+        "text",
+        "impact",
+        "approval_state",
+        "raised_on"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^A-[0-9]{2,3}$"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 5
+        },
+        "impact": {
+          "type": "string",
+          "minLength": 5
+        },
+        "approval_state": {
+          "enum": [
+            "PENDING_APPROVAL",
+            "APPROVED",
+            "REJECTED"
+          ]
+        },
+        "raised_on": {
+          "$ref": "#/$defs/date"
+        }
+      },
+      "additionalProperties": false
+    },
+    "proposal_entry": {
+      "type": "object",
+      "required": [
+        "id",
+        "text",
+        "state",
+        "raised_on"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^P-[0-9]{3}$"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 5
+        },
+        "state": {
+          "enum": [
+            "OPEN",
+            "APPROVED",
+            "REJECTED",
+            "SUPERSEDED"
+          ]
+        },
+        "raised_on": {
+          "$ref": "#/$defs/date"
+        },
+        "decision_id": {
+          "type": "string",
+          "pattern": "^DEC-[0-9]{3}$"
+        }
+      },
+      "allOf": [
+        {
+          "$comment": "RULE P1 — an approved proposal must point at its Decision Record (Spec R01 §9).",
+          "if": {
+            "properties": {
+              "state": {
+                "const": "APPROVED"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "required": [
+              "decision_id"
+            ]
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "decision_entry": {
+      "type": "object",
+      "required": [
+        "decision_id",
+        "title",
+        "linked_proposal",
+        "rationale",
+        "alternatives_considered",
+        "approved_by",
+        "approved_on",
+        "approved_in_revision"
+      ],
+      "properties": {
+        "decision_id": {
+          "type": "string",
+          "pattern": "^DEC-[0-9]{3}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3
+        },
+        "linked_proposal": {
+          "type": "string",
+          "pattern": "^P-[0-9]{3}$"
+        },
+        "linked_elements": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 10
+        },
+        "alternatives_considered": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "approved_by": {
+          "const": "USER"
+        },
+        "approved_on": {
+          "$ref": "#/$defs/date"
+        },
+        "approved_in_revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "user_override_of": {
+          "type": "string",
+          "pattern": "^OBJ-[0-9]{3}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "cr_entry": {
+      "type": "object",
+      "required": [
+        "id",
+        "target_element",
+        "current_value",
+        "proposed_value",
+        "reason",
+        "impact",
+        "classification",
+        "state",
+        "raised_on"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^CR-[0-9]{3}$"
+        },
+        "target_element": {
+          "type": "string",
+          "minLength": 2
+        },
+        "current_value": {},
+        "proposed_value": {},
+        "reason": {
+          "type": "string",
+          "minLength": 5
+        },
+        "impact": {
+          "type": "string",
+          "minLength": 5
+        },
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "classification": {
+          "enum": [
+            "MINOR",
+            "MAJOR"
+          ]
+        },
+        "state": {
+          "enum": [
+            "DRAFT",
+            "PENDING_APPROVAL",
+            "APPROVED",
+            "REJECTED",
+            "DEFERRED",
+            "APPLIED"
+          ]
+        },
+        "raised_on": {
+          "$ref": "#/$defs/date"
+        },
+        "approved_on": {
+          "$ref": "#/$defs/date"
+        },
+        "applied_in_revision": {
+          "$ref": "#/$defs/revision"
+        }
+      },
+      "allOf": [
+        {
+          "$comment": "RULE CR1 — NO AUTO-APPLY. An applied CR must carry approval + revision, regardless of MINOR/MAJOR (Gate 00 change #1).",
+          "if": {
+            "properties": {
+              "state": {
+                "const": "APPLIED"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "required": [
+              "approved_on",
+              "applied_in_revision"
+            ]
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "objection_entry": {
+      "type": "object",
+      "required": [
+        "id",
+        "decision_under_objection",
+        "problem",
+        "impact",
+        "alternative",
+        "state",
+        "raised_on"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^OBJ-[0-9]{3}$"
+        },
+        "decision_under_objection": {
+          "type": "string",
+          "minLength": 3
+        },
+        "problem": {
+          "type": "string",
+          "minLength": 10
+        },
+        "impact": {
+          "type": "string",
+          "minLength": 5
+        },
+        "alternative": {
+          "type": "string",
+          "minLength": 5
+        },
+        "state": {
+          "enum": [
+            "OPEN",
+            "WITHDRAWN",
+            "USER_OVERRIDE",
+            "ACCEPTED"
+          ]
+        },
+        "raised_on": {
+          "$ref": "#/$defs/date"
+        }
+      },
+      "additionalProperties": false
+    },
+    "changelog_entry": {
+      "type": "object",
+      "required": [
+        "revision",
+        "date",
+        "type",
+        "summary"
+      ],
+      "properties": {
+        "revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "type": {
+          "enum": [
+            "INITIAL",
+            "CR_APPLIED",
+            "TECHNICAL_FIX",
+            "FREEZE",
+            "REGENERATION"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 5
+        },
+        "cr_id": {
+          "type": "string",
+          "pattern": "^CR-[0-9]{3}$"
+        },
+        "master_hash_before": {
+          "$ref": "#/$defs/hash"
+        },
+        "master_hash_after": {
+          "$ref": "#/$defs/hash"
+        },
+        "geometry_version_before": {
+          "$ref": "#/$defs/geometry_version"
+        },
+        "geometry_version_after": {
+          "$ref": "#/$defs/geometry_version"
+        },
+        "tests_rerun": {
+          "type": "boolean"
+        },
+        "regressions_found": {
+          "type": "boolean"
+        },
+        "output_diff_explained": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "$comment": "RULE TF1 — Technical Fix proof obligations (Gate 00 change #3). Hash equal, revision equal, geometry version equal, tests re-run, zero regressions.",
+          "if": {
+            "properties": {
+              "type": {
+                "const": "TECHNICAL_FIX"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "master_hash_before",
+              "master_hash_after",
+              "geometry_version_before",
+              "geometry_version_after",
+              "tests_rerun",
+              "regressions_found",
+              "output_diff_explained"
+            ],
+            "properties": {
+              "tests_rerun": {
+                "const": true
+              },
+              "regressions_found": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "$comment": "RULE CR2 — a CR_APPLIED changelog line must name its CR.",
+          "if": {
+            "properties": {
+              "type": {
+                "const": "CR_APPLIED"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "cr_id"
+            ]
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "fingerprint": {
+      "type": "object",
+      "description": "9-field view fingerprint (Spec R01 §13).",
+      "required": [
+        "project_id",
+        "master_revision",
+        "master_hash",
+        "geometry_version",
+        "element_set_hash",
+        "positions_hash",
+        "materials_hash",
+        "camera_id",
+        "camera_hash"
+      ],
+      "properties": {
+        "project_id": {
+          "type": "string",
+          "pattern": "^PRJ-[0-9]{2,3}$"
+        },
+        "master_revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "master_hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "geometry_version": {
+          "$ref": "#/$defs/geometry_version"
+        },
+        "element_set_hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "positions_hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "materials_hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "camera_id": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^CAM-[0-9]{2}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "camera_hash": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "description": "Registry of every produced file, with its class and binding strength (Gate 00 changes #1 and #2).",
+      "required": [
+        "output_id",
+        "file",
+        "class",
+        "view_type",
+        "guarantee",
+        "binding_geometry",
+        "binding_visual",
+        "fingerprint",
+        "generated_on"
+      ],
+      "properties": {
+        "output_id": {
+          "type": "string",
+          "pattern": "^OUT-[0-9]{3}$"
+        },
+        "file": {
+          "type": "string",
+          "minLength": 3
+        },
+        "class": {
+          "enum": [
+            "A",
+            "B",
+            "C"
+          ]
+        },
+        "view_type": {
+          "type": "string",
+          "minLength": 2
+        },
+        "guarantee": {
+          "enum": [
+            "DETERMINISTIC_GEOMETRIC_MATCH",
+            "GEOMETRY_DERIVED_VISUAL_TREATMENT_MAY_DIFFER",
+            "NOT_GEOMETRICALLY_GUARANTEED_NON_BINDING"
+          ]
+        },
+        "binding_geometry": {
+          "type": "boolean"
+        },
+        "binding_visual": {
+          "type": "boolean"
+        },
+        "supersedes_A": {
+          "type": "boolean"
+        },
+        "caption": {
+          "type": "string"
+        },
+        "fingerprint": {
+          "$ref": "#/$defs/fingerprint"
+        },
+        "generated_on": {
+          "$ref": "#/$defs/date"
+        },
+        "derived_from_output": {
+          "type": "string",
+          "pattern": "^OUT-[0-9]{3}$"
+        }
+      },
+      "allOf": [
+        {
+          "$comment": "RULE O1 — Class A: deterministic geometric match, binding in both senses.",
+          "if": {
+            "properties": {
+              "class": {
+                "const": "A"
+              }
+            },
+            "required": [
+              "class"
+            ]
+          },
+          "then": {
+            "properties": {
+              "guarantee": {
+                "const": "DETERMINISTIC_GEOMETRIC_MATCH"
+              },
+              "binding_geometry": {
+                "const": true
+              },
+              "binding_visual": {
+                "const": true
+              }
+            }
+          }
+        },
+        {
+          "$comment": "RULE O2 — Class B: geometry derived from the same master, visual treatment may differ; NEVER a substitute for A (Gate 00 change #1).",
+          "if": {
+            "properties": {
+              "class": {
+                "const": "B"
+              }
+            },
+            "required": [
+              "class"
+            ]
+          },
+          "then": {
+            "required": [
+              "derived_from_output"
+            ],
+            "properties": {
+              "guarantee": {
+                "const": "GEOMETRY_DERIVED_VISUAL_TREATMENT_MAY_DIFFER"
+              },
+              "binding_geometry": {
+                "const": true
+              },
+              "binding_visual": {
+                "const": false
+              },
+              "supersedes_A": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "$comment": "RULE O3 — Class C: non-binding, and the word 100% / مطابق / exact is forbidden in its caption (Gate 00 change #2).",
+          "if": {
+            "properties": {
+              "class": {
+                "const": "C"
+              }
+            },
+            "required": [
+              "class"
+            ]
+          },
+          "then": {
+            "properties": {
+              "guarantee": {
+                "const": "NOT_GEOMETRICALLY_GUARANTEED_NON_BINDING"
+              },
+              "binding_geometry": {
+                "const": false
+              },
+              "binding_visual": {
+                "const": false
+              },
+              "supersedes_A": {
+                "const": false
+              },
+              "caption": {
+                "not": {
+                  "pattern": "(100\\s*%|100\\s*٪|مطابق|متطابق|identical|exact match|pixel[- ]accurate)"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "circulation_path": {
+      "type": "object",
+      "description": "A declared movement/circulation path. Geometry and endpoints are DECLARED data, never inferred. Absence of the collection means no path has been declared, NOT that the space has no circulation.",
+      "required": [
+        "id",
+        "name",
+        "start_ref",
+        "end_ref"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^CP-[0-9]{2,3}$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 2
+        },
+        "centerline": {
+          "$ref": "#/$defs/fact",
+          "description": "Ordered list of [x,y] points in mm. Two points minimum."
+        },
+        "start_ref": {
+          "$ref": "#/$defs/fact",
+          "description": "Element id this path starts at. Must resolve."
+        },
+        "end_ref": {
+          "$ref": "#/$defs/fact",
+          "description": "Element id this path ends at. Must resolve."
+        },
+        "required_width": {
+          "$ref": "#/$defs/fact",
+          "description": "Minimum clear width in mm. Enforced ONLY when status is C/D from a trusted source. Absent/untrusted = no rule, never a default number."
+        },
+        "segments": {
+          "$ref": "#/$defs/fact",
+          "description": "Alternative to centerline: an ordered list of segments, each [[x1,y1],[x2,y2]] in mm. This representation CAN express a gap between consecutive segments, which centerline cannot."
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$comment": "RULE CP1 — a path declares its geometry exactly one way: a centerline polyline OR an explicit segment list. Never both, never neither, so the representation is never guessed.",
+          "oneOf": [
+            {
+              "required": [
+                "centerline"
+              ],
+              "not": {
+                "required": [
+                  "segments"
+                ]
+              }
+            },
+            {
+              "required": [
+                "segments"
+              ],
+              "not": {
+                "required": [
+                  "centerline"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "swing_geometry": {
+      "type": "object",
+      "description": "MINIMAL swing representation (Phase 00.5-B5). These are the only three values without which a swing arc cannot be computed. Declaring swing is OPTIONAL; if it is absent the agent records a GAP and computes nothing. It NEVER assumes a hinge side, an opening side or an angle.",
+      "required": [
+        "hinge",
+        "side",
+        "angle"
+      ],
+      "properties": {
+        "hinge": {
+          "enum": [
+            "START",
+            "END"
+          ],
+          "description": "Which end of the aperture the leaf is hinged on, measured along the host wall from its start point."
+        },
+        "side": {
+          "enum": [
+            "POSITIVE",
+            "NEGATIVE"
+          ],
+          "description": "Which side of the host wall the leaf opens towards, as the sign of the wall normal. Declared, never inferred."
+        },
+        "angle": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 180,
+          "description": "Maximum opening angle in degrees."
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

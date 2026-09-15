@@ -1,0 +1,242 @@
+{
+  "_README": "TEMPLATE ONLY — copy, rename, fill. Every field marked <FILL> must be replaced. Do NOT invent values: if a value is not given by the user, keep status 'U' with value null and register it in registers.unknowns.",
+  "meta": {
+    "project_id": "PRJ-00",
+    "project_name": "<FILL>",
+    "revision": "R00",
+    "geometry_version": "G-000",
+    "status": "DRAFT",
+    "track": "FULL",
+    "units": "mm",
+    "created_on": "2026-09-11",
+    "is_test_project": false,
+    "not_for_construction": "DESIGN INTENT — NOT FOR CONSTRUCTION"
+  },
+  "space": {
+    "outline": {
+      "value": null,
+      "unit": "mm",
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "awaiting client survey",
+      "recorded_on": "2026-09-11",
+      "blocking": true,
+      "unknown_id": "U-001",
+      "note": "Room outline polygon as [[x,y],...] in mm. BLOCKING — nothing can be planned without it."
+    },
+    "ceiling_height": {
+      "value": null,
+      "unit": "mm",
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "awaiting client survey",
+      "recorded_on": "2026-09-11",
+      "blocking": true,
+      "unknown_id": "U-002"
+    },
+    "orientation_north": {
+      "value": null,
+      "unit": "deg",
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not supplied",
+      "recorded_on": "2026-09-11",
+      "blocking": false,
+      "unknown_id": "U-003",
+      "note": "NON-BLOCKING. Never assume sun path or qibla direction."
+    },
+    "floor_level": {
+      "value": null,
+      "unit": "mm",
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not supplied",
+      "recorded_on": "2026-09-11",
+      "blocking": false,
+      "unknown_id": "U-004"
+    }
+  },
+  "presence_register": {
+    "columns": {
+      "value": null,
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not asked yet",
+      "recorded_on": "2026-09-11",
+      "blocking": true,
+      "unknown_id": "U-005",
+      "presence": "UNKNOWN",
+      "note": "Do NOT assume there are no columns. Unasked is not absent."
+    },
+    "beams": {
+      "value": null,
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not asked yet",
+      "recorded_on": "2026-09-11",
+      "blocking": true,
+      "unknown_id": "U-006",
+      "presence": "UNKNOWN"
+    },
+    "protrusions": {
+      "value": null,
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not asked yet",
+      "recorded_on": "2026-09-11",
+      "blocking": true,
+      "unknown_id": "U-007",
+      "presence": "UNKNOWN"
+    },
+    "level_changes": {
+      "value": null,
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not asked yet",
+      "recorded_on": "2026-09-11",
+      "blocking": false,
+      "unknown_id": "U-008",
+      "presence": "UNKNOWN"
+    },
+    "services": {
+      "value": null,
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not asked yet",
+      "recorded_on": "2026-09-11",
+      "blocking": false,
+      "unknown_id": "U-009",
+      "presence": "UNKNOWN"
+    },
+    "existing_furniture": {
+      "value": null,
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not asked yet",
+      "recorded_on": "2026-09-11",
+      "blocking": false,
+      "unknown_id": "U-010",
+      "presence": "UNKNOWN"
+    },
+    "openings": {
+      "value": null,
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not asked yet",
+      "recorded_on": "2026-09-11",
+      "blocking": true,
+      "unknown_id": "U-011",
+      "presence": "UNKNOWN",
+      "note": "Openings are BLOCKING for Phase 01+. Never invent a door or window."
+    },
+    "circulation": {
+      "value": null,
+      "status": "U",
+      "source_type": "NOT_PROVIDED",
+      "source_ref": "not asked yet",
+      "recorded_on": "2026-09-11",
+      "blocking": true,
+      "unknown_id": "U-012",
+      "presence": "UNKNOWN",
+      "note": "Do NOT assume the space has no defined circulation. Nobody has been asked."
+    }
+  },
+  "walls": [],
+  "openings": [],
+  "columns": [],
+  "zones": [],
+  "furniture": [],
+  "materials": [],
+  "lighting": [],
+  "cameras": [],
+  "registers": {
+    "unknowns": [
+      {
+        "id": "U-001",
+        "question": "Room outline with dimensions in mm?",
+        "blocking": true,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-002",
+        "question": "Clear ceiling height in mm?",
+        "blocking": true,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-003",
+        "question": "North orientation?",
+        "blocking": false,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-004",
+        "question": "Finished floor level / level changes?",
+        "blocking": false,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-005",
+        "question": "Are there columns? If none, state NONE explicitly.",
+        "blocking": true,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-006",
+        "question": "Are there ceiling beams? If none, state NONE explicitly.",
+        "blocking": true,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-007",
+        "question": "Are there protrusions/recesses? If none, state NONE explicitly.",
+        "blocking": true,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-008",
+        "question": "Any floor level changes? If none, state NONE explicitly.",
+        "blocking": false,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-009",
+        "question": "Existing services (electrical/plumbing/HVAC)? If none, state NONE.",
+        "blocking": false,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-010",
+        "question": "Existing furniture to keep? If none, state NONE explicitly.",
+        "blocking": false,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-011",
+        "question": "Door/window positions, widths, heights, swing?",
+        "blocking": true,
+        "raised_on": "2026-09-11"
+      },
+      {
+        "id": "U-012",
+        "question": "Are there defined circulation routes in this space, and what are they?",
+        "blocking": true,
+        "raised_on": "2026-09-11"
+      }
+    ],
+    "assumptions": [],
+    "proposals": [],
+    "decisions": [],
+    "change_requests": [],
+    "objections": [],
+    "changelog": [
+      {
+        "revision": "R00",
+        "date": "2026-09-11",
+        "type": "INITIAL",
+        "summary": "Master created from template. No confirmed data yet."
+      }
+    ]
+  },
+  "outputs": []
+}
